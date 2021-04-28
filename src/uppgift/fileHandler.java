@@ -20,11 +20,16 @@ public class fileHandler {
 
     public void readFile(File file) {
         clearVariables();
+
+        //Get the filetype (betalningsservice.txt)
         String name = fileType(file.getName());
         try {
             Scanner myReader = new Scanner(file);
             while (myReader.hasNextLine()) {
+                //Read in line
                 String data = myReader.nextLine();
+
+                //Get the Posttype
                 postType = getPostType(data,name);
                 if(postType.equals("O")){
                     accountNumber = data.substring(2,16);
@@ -64,9 +69,9 @@ public class fileHandler {
         } finally {
             paymentReciever.endPaymentBundle();
         }
-
     }
 
+    //Checks to see what type of file this is
     private String fileType(String name){
         String fileType = "";
         for(int i = name.length()-1; i>0;i--){
@@ -86,12 +91,14 @@ public class fileHandler {
         String postType = "";
     }
 
+    //Get the Posttype
     private String getPostType(String data, String name) throws Exception {
         if(name.equals("_betalningsservice.txt")) return data.substring(0,1);
         else if(name.equals("_inbetalningstjansten.txt")) return data.substring(0,2);
         else throw new Exception("Cant handle " + name);
     }
 
+    //Format the String amount to BigDecimal
     private BigDecimal formatAmount(String data,int amountStart, int amountEnd){
         String amount = "";
         for(int i = amountStart; i<=amountEnd;i++){
